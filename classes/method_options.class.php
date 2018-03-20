@@ -8,9 +8,9 @@ class MethodOptions {
     public function __construct($parameter_source, $types = null) {
         $this->source = $parameter_source;
         $parameter_array = self::parse();
+            debug($parameter_array);
         if (is_array($types)) {
             $tmp = [];
-            debug($parameter_array);
             foreach ($parameter_array as $parameter) {
                 
             }
