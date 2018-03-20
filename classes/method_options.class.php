@@ -27,6 +27,7 @@ class MethodOptions {
         }
         $parameter_source = preg_replace('/\s+/', '', $parameter_source);
         //
+        debug($parameter_source);
         if (strstr($parameter_source, ';')) {
             $parameter_array = explode(';', $parameter_source);
             $return = [];
