@@ -6,6 +6,6 @@ echo '<h3>Initialize with Config: ' . $config . '</h3>';
 
 switch ($config) {
     case 'basic':
-        cp_r(APP_DIR . 'xtreme/-init/files/', APP_DIR);
+        File::cp(APP_DIR . 'xtreme/-init/files/', APP_DIR, 'rd');
         break;
 }
