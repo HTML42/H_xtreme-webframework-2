@@ -1,4 +1,7 @@
 <?php
+
+include "init_bootstrap.php";
+
 $step = isset($_GET['step']) && strlen($_GET['step']) > 0 ? $_GET['step'] : 'start';
 
 switch($step) {
