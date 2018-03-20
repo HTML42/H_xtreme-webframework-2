@@ -41,7 +41,7 @@ class MethodOptions {
             return $return;
         } else {
             //Simple-Format
-            $parameter_array = explode('', $parameter_source);
+            $parameter_array = str_split($parameter_source);
             return array_flip($parameter_array);
         }
     }
