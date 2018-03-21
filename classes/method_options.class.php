@@ -7,8 +7,8 @@ class MethodOptions {
 
     public function __construct($parameter_source, $types = null) {
         $this->source = $parameter_source;
-        $parameter_array = self::parse();
-            debug($parameter_array);
+        $parameter_array = MethodOptions::parse($this->source);
+        debug($parameter_array);
         if (is_array($types)) {
             $tmp = [];
             foreach ($parameter_array as $parameter) {
@@ -19,20 +19,15 @@ class MethodOptions {
 
     public static function parse($parameter_source = null) {
         if (!is_string($parameter_source)) {
-            if (isset($this) && isset($this->source)) {
-                $parameter_source = $this->source;
-            } else {
-                $parameter_source = '';
-            }
+            $parameter_source = '';
         }
         $parameter_source = preg_replace('/\s+/', '', $parameter_source);
         //
-        debug($parameter_source);
         if (strstr($parameter_source, ';')) {
             $parameter_array = explode(';', $parameter_source);
             $return = [];
-            foreach($parameter_array as $parameter_key =>&$parameter) {
-                if(strstr($parameter, '=')) {
+            foreach ($parameter_array as $parameter_key => &$parameter) {
+                if (strstr($parameter, '=')) {
                     $parameter_split = explode('=', $parameter);
                     $return[$parameter_split[0]] = trim($parameter_split[1]);
                 } else {
