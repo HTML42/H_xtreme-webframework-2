@@ -38,7 +38,9 @@ class MethodOptions {
         } else {
             //Simple-Format
             $parameter_array = str_split($parameter_source);
-            return array_flip($parameter_array);
+            $parameters = array_flip($parameter_array);
+            array_walk($parameters, function(&$item){$item = true;});
+            return $parameters;
         }
     }
 
