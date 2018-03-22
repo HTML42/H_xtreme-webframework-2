@@ -3,7 +3,6 @@
 class File {
 
     public static function cp($source, $destination, $options = '') {
-        debug('File::CP');
         $MethodOptions = new MethodOptions($options);
         $mop = $MethodOptions->parameter; // MethodOptions-Parameters (mop)
         $path = self::path($source);
@@ -19,9 +18,12 @@ class File {
         foreach ($folder as $item) {
             $itempath = $path . $item;
             if (is_file($itempath)) {
-                copy($itempath, $destination . $item);
-            } else if ($mop['r'] && is_dir($itempath)) {
-                self::cp(self::n($itempath), self::n($destination . $item), $mop);
+                if (!is_file($destination . $item) || $MethodOptions->p('f')) {
+                    copy($itempath, $destination . $item);
+                }
+            } else if ($MethodOptions->p('r') && is_dir($itempath)) {+
+                @mkdir(self::n($destination . $item));
+                self::cp(self::n($itempath), self::n($destination . $item), $options);
             }
         }
     }
@@ -46,25 +48,23 @@ class File {
 
     public static function path($source) {
         $path = explode('/', $source);
-        $path = array_slice($path, -1);
+        $path = array_slice($path, 0, count($path) - 1);
         $path = implode('/', $path);
-        return $path;
+        return $path . '/';
     }
 
-    public static function normalize($source) {
+    public static function normalize_folder($source) {
         if (is_string($source)) {
             $source = trim($source);
-            if (is_dir($source)) {
-                if (substr($source, -1) != '/') {
-                    $source .= '/';
-                }
+            if (substr($source, -1) != '/') {
+                $source .= '/';
             }
         }
         return $source;
     }
-    
+
     public static function n($p) {
-        return self::normalize($p);
+        return self::normalize_folder($p);
     }
 
 }

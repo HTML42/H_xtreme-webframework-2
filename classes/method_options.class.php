@@ -74,5 +74,13 @@ class MethodOptions {
             return $parameters;
         }
     }
+    
+    public function p($parameter_key, $value = true) {
+        if(isset($this->parameter['r']) && $this->parameter['r'] == $value) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }
