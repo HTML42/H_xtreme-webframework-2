@@ -8,13 +8,42 @@ class MethodOptions {
     public function __construct($parameter_source, $types = null) {
         $this->source = $parameter_source;
         $parameter_array = MethodOptions::parse($this->source);
-        debug($parameter_array);
         if (is_array($types)) {
             $tmp = [];
-            foreach ($parameter_array as $parameter) {
-                
+            foreach ($parameter_array as $parameter_key => $parameter_value) {
+                if (isset($types[$parameter_key])) {
+                    if (is_array($types[$parameter_key])) {
+                        $type_config = $types[$parameter_key];
+                    } else if (is_string($types[$parameter_key])) {
+                        $type_config = array('type' => $types[$parameter_key]);
+                    } else {
+                        $type_config = null;
+                    }
+                    if (is_array($type_config)) {
+                        switch ($type_config['type']) {
+                            case 'int':
+                            case 'integer':
+                                $parameter_array[$parameter_key] = intval($parameter_value);
+                                break;
+                            case 'str':
+                            case 'string':
+                                $parameter_array[$parameter_key] = strval($parameter_value);
+                                break;
+                            case 'bool':
+                                $parameter_array[$parameter_key] = boolval($parameter_value);
+                                break;
+                            case 'json':
+                                $parameter_array[$parameter_key] = @json_encode($parameter_value, true);
+                                if(!is_array($parameter_array[$parameter_key])) {
+                                    $parameter_array[$parameter_key] = array();
+                                }
+                                break;
+                        }
+                    }
+                }
             }
         }
+        $this->parameter = $parameter_array;
     }
 
     public static function parse($parameter_source = null) {
@@ -31,7 +60,7 @@ class MethodOptions {
                     $parameter_split = explode('=', $parameter);
                     $return[$parameter_split[0]] = trim($parameter_split[1]);
                 } else {
-                    $return[$parameter_split[0]] = true;
+                    $return[$parameter] = true;
                 }
             }
             return $return;
@@ -39,7 +68,9 @@ class MethodOptions {
             //Simple-Format
             $parameter_array = str_split($parameter_source);
             $parameters = array_flip($parameter_array);
-            array_walk($parameters, function(&$item){$item = true;});
+            array_walk($parameters, function(&$item) {
+                $item = true;
+            });
             return $parameters;
         }
     }
