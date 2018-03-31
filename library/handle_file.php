@@ -12,10 +12,8 @@ if($File_page->exists) {
     
 }
 
-$File_base = File::instance(App::$response_base);
-debug($File_base);
+$File_base = File::i(App::$response_base);
 $html = $File_base->get_content();
-debug($html);
 $html = str_replace('##yield##', App::$content, $html);
 
 Response::deliver($html);
