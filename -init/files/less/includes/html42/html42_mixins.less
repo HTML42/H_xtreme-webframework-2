@@ -1,0 +1,25 @@
+.clear() {
+    display: table;
+    clear: both;
+    float: none;
+    height: 0;
+    width: 0;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+.clear_after() {
+    &:after {
+        content: '';
+        .clear();
+    }
+}
+.clean_list() {
+    padding: 0;
+    margin: 0;
+    > li {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+}
