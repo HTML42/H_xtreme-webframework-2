@@ -1,6 +1,8 @@
 <!DOCTYPE ->
 <html>
     <head>
+        <meta charset="utf-8" />
+        <?= File::i('components/html_head.php')->get_content() ?>
         
     </head>
     <body>
