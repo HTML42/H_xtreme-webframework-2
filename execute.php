@@ -16,4 +16,4 @@ include 'library/bootstrap.php';
 
 include LIB . 'handle_file.php';
 
-echo 'xtreme';
+exit();

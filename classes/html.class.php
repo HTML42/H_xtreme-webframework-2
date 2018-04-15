@@ -13,11 +13,7 @@ class Html {
             'data-length' => count($items)
         );
         //UL-Tag
-        $html = '<ul';
-        foreach ($attr as $key => $value) {
-            $html .= ' ' . $key . '="' . str_replace('"', '\\"', $value) . '" ';
-        }
-        $html .= '>';
+        $html = '<ul' . self::_attributes($attr) . '>';
         //LI-Tags
         foreach ($items as $item_index => $item) {
             $li_content = '';
@@ -43,16 +39,33 @@ class Html {
                 $li_attr['class'] = $li_class;
             }
             //
-            $html .= '<li';
-            foreach ($li_attr as $key => $value) {
-                $html .= ' ' . $key . '="' . str_replace('"', '\\"', $value) . '" ';
-            }
-            $html .= '>';
+            $html .= '<li' . self::_attributes($li_attr) . '>';
             //
             $html .= $li_content;
             $html .= '</li>';
         }
         $html .= '</ul>';
+        return $html;
+    }
+
+    public static function link($href, $content, $attr = array()) {
+        $attr = $attr + array(
+            'href' => trim($href)
+        );
+        if (Request::$requested_clean_path == $attr['href']) {
+            $attr['class'] = (isset($attr['class']) ? $attr['class'] . ' active' : 'active');
+        }
+        $html = '<a' . self::_attributes($attr) . '>';
+        $html .= $content;
+        $html .= '</a>';
+        return $html;
+    }
+
+    public static function _attributes($attr) {
+        $html = '';
+        foreach ($attr as $key => $value) {
+            $html .= ' ' . $key . '="' . str_replace('"', '\\"', $value) . '" ';
+        }
         return $html;
     }
 

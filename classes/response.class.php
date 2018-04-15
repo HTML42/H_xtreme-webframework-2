@@ -28,42 +28,23 @@ class Response {
         if (strlen($current_output) > 0) {
             $content = $current_output . $content;
         }
-        self::$content = $content;
-
-        if (!App::$config['cache']) {
-            self::header('Cache-Control:max-age=0;No-Cache, must-revalidate');
-            self::header('Pragma:No-Cache, must-revalidate');
-            self::header('Expires: ' . date('d M Y H:i:s \G\M\T', time() - DAY));
-            self::header('Etag: "' . md5(microtime(true)) . '"');
-        } else {
-            self::header('Cache-Control:max-age=' . App::$expires);
-            self::header('Pragma:Cache');
-            self::header('Expires: ' . date('d M Y H:i:s \G\M\T', time() + App::$expires));
-            self::header('Etag: "' . self::etag() . '"');
+        //Google PageSpeed:
+        if (stripos($_SERVER['HTTP_USER_AGENT'], 'Speed Insights')) {
+            if (preg_match('/\<link.*\>/isU', $content, $matches)) {
+                $link_matches = implode('', $matches);
+                $content = str_replace($matches, '', $content);
+                $content = str_replace('</body>', $link_matches, $content);
+            }
         }
+        $content = preg_replace('/\s\s+/', ' ', $content);
+        $content = preg_replace('/\>\s+\</', '><', $content);
+        //
+        self::$content = $content;
 
         self::header('Content-length: ' . strlen(self::$content));
         self::header('Content-Type: ' . App::$mime . '; charset=' . App::$encoding, intval(App::$status));
-        if (App::$config['cache'] && self::etag_match()) {
-            self::header("HTTP/1.1 304 Not Modified");
-        } else {
-            echo self::$content;
-        }
-        exit();
-    }
 
-    private static function etag() {
-        if (!isset(self::$classcache['etag'])) {
-            self::$classcache['etag'] = App::$filename . '-' . strlen(self::$content);
-            if (is_int(App::$last_change)) {
-                self::$classcache['etag'] .= '-' . App::$last_change;
-            }
-        }
-        return self::$classcache['etag'];
-    }
-
-    private static function etag_match() {
-        return isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == '"' . self::etag() . '"';
+        echo self::$content;
     }
 
 }
