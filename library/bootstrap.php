@@ -27,6 +27,7 @@ include CLASSES . 'method_options.class.php';
 include CLASSES . 'utilities.class.php';
 include CLASSES . 'request.class.php';
 include CLASSES . 'response.class.php';
+include CLASSES . 'html.class.php';
 //
 include LIB . 'ensure_functions.php';
 
