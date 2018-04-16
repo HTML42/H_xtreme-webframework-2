@@ -1,5 +1,4 @@
 <?php
-
 //Enable Requirements
 ini_set('short_open_tag', 1);
 ini_set('magic_quotes_gpc', 1);

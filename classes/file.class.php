@@ -31,7 +31,8 @@ class File {
      * @return new File()
      */
     public static function i($file_path) {
-        return self::instance_of_first_existing_file(self::_create_try_list($file_path));
+        $try_list = self::_create_try_list($file_path);
+        return self::instance_of_first_existing_file($try_list);
     }
 
     /**
