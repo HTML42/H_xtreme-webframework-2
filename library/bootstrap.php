@@ -16,6 +16,11 @@ if (strstr($_SERVER['SERVER_NAME'], 'localhost') || strstr($_SERVER['SERVER_NAME
 } else {
     define('ENV', 'live');
 }
+if (ENV != 'live') {
+    ini_set('error_reporting', E_ALL);
+    error_reporting(E_ALL);
+    ini_set("display_errors", 1);
+}
 //
 define('DAY', 3600 * 24);
 
@@ -28,6 +33,7 @@ include CLASSES . 'utilities.class.php';
 include CLASSES . 'request.class.php';
 include CLASSES . 'response.class.php';
 include CLASSES . 'html.class.php';
+include CLASSES . 'curl.class.php';
 //
 include LIB . 'ensure_functions.php';
 
