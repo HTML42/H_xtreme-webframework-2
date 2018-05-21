@@ -1,5 +1,6 @@
 <?php
-foreach (array('googlebot', 'bingbot', 'slurp', 'duckduckbot', 'baiduspider', 'yandexbot', 'sogou', 'exabot', 'facebot', 'ia_archiver') as $checkstring) {
+foreach (array('google page speed', 'google search console', 'googlebot', 'www.google.com', 'google web preview', 'google-site-verification',
+    'bingbot', 'slurp', 'duckduckbot', 'baiduspider', 'yandexbot', 'sogou', 'exabot', 'facebot', 'ia_archiver') as $checkstring) {
     if (strstr(strtolower($_SERVER['HTTP_USER_AGENT']), $checkstring)) {
         $_COOKIE['gdpr'] = '1';
         break;
