@@ -9,6 +9,7 @@ define('LIB', ROOT . 'library/');
 define('CLASSES', ROOT . 'classes/');
 define('CACHE', ROOT . '../cache/');
 define('PROJECT_ROOT', str_replace('xtreme/', '', ROOT));
+define('SCRIPT_INCLUDES', PROJECT_ROOT . 'script_includes/');
 if (strstr($_SERVER['SERVER_NAME'], 'localhost') || strstr($_SERVER['SERVER_NAME'], '192.')) {
     define('ENV', 'dev');
 } else if (strstr($_SERVER['SERVER_NAME'], 'staging')) {
@@ -40,3 +41,11 @@ include LIB . 'ensure_functions.php';
 //Initiate RequestClass
 Request::init();
 define('BASEURL', "http" . (is_https() ? 's' : '') . "://" . $_SERVER['SERVER_NAME'] . '/' . Request::$url_path_to_script);
+
+if(is_dir(SCRIPT_INCLUDES)) {
+    foreach(Utilities::ls(SCRIPT_INCLUDES, true) as $script_filename) {
+        if(File::_ext($script_filename) == 'php') {
+            include SCRIPT_INCLUDES . $script_filename;
+        }
+    }
+}
