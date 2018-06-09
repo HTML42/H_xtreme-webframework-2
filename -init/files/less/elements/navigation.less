@@ -1,0 +1,86 @@
+#navigation {
+    right: 0;
+    nav {
+
+    }
+    ul {
+        .clear_after();
+        .clean_list();
+        li {
+            > a {
+                display: block;
+                color: @color_text;
+                font-weight: 700;
+                &:hover {
+                    text-decoration: none;
+                    text-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+                }
+                &.active {
+                    color: #000;
+                    text-decoration: underline;
+                    &:hover {
+                        text-shadow: none;
+                    }
+                }
+            }
+            &.item_3 {
+                clear: both;
+            }
+        }
+    }
+    @media @media_big {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        z-index: 5;
+        ul {
+            li {
+                float: left;
+                > a {
+                    width: 150px;
+                    padding-left: 22px;
+                    font-size: 20px;
+                    .h(@header_height / 2);
+                }
+            }
+        }
+    }
+    @media @media_small {
+        position: fixed;
+        top: @header_height;
+        left: 0;
+        z-index: 100;
+        background-color: @color_secondary_light;
+        ul {
+            @navi_item_height: 50px;
+            @navi_item_length: 4;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height .3s linear;
+            &.active {
+                max-height: @navi_item_length * @navi_item_height + @navi_item_length * 1px;
+            }
+            li {
+                border-top: 1px solid @color_border_normal;
+                > a {
+                    text-align: center;
+                    font-size: @navi_item_height / 2;
+                    .h(@navi_item_height);
+                }
+            }
+        }
+    }
+}
+#navi_toggler {
+    @media @media_big {
+        display: none;
+    }
+    @media @media_small {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 100px;
+        background: transparent url('../images/icons/navi_toggler_grey.svg') no-repeat center;
+    }
+}

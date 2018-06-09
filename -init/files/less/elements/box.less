@@ -1,0 +1,16 @@
+.box {
+    padding: @distance_small;
+    margin-bottom: @distance_normal;
+    border-radius: 10px;
+    border: 1px solid @color_border_normal;
+    box-shadow: 0;
+    transition: box-shadow 0.3s linear;
+    &:hover {
+        background-color: #FFF;
+        box-shadow: @box_shadow;
+    }
+    &:target, &:target:hover {
+        background-color: #DFD;
+        box-shadow: @box_shadow;
+    }
+}
