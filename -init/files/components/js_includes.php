@@ -1,0 +1,1 @@
+<script src="assets/js/<?= ENV == 'live' ? 'min/' : '' ?>script.js" async></script>

@@ -2,4 +2,4 @@
 
 <title>My Website</title>
 
-<link href="assets/css/<?= ENV == 'live' ? 'min/' : '' ?>styles.css" rel="stylesheet" type="text/css" />
+<link href="assets/css/styles<?= ENV == 'live' ? '.min' : '' ?>.css" rel="stylesheet" type="text/css" />
