@@ -52,7 +52,7 @@ class Html {
         $attr = $attr + array(
             'href' => trim($href)
         );
-        if (Request::$requested_clean_path == $attr['href']) {
+        if (Request::$requested_clean_path == $attr['href'] || str_replace('admin/', '', Request::$requested_clean_path) == $attr['href']) {
             $attr['class'] = (isset($attr['class']) ? $attr['class'] . ' active' : 'active');
         }
         $html = '<a' . self::_attributes($attr) . '>';
