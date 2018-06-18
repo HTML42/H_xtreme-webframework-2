@@ -20,7 +20,8 @@ class File {
      */
     public static function instance($file_path) {
         if (!isset(self::$_CACHE['instances'][$file_path])) {
-            self::$_CACHE['instances'][$file_path] = new File($file_path);
+            $Class = get_called_class();
+            self::$_CACHE['instances'][$file_path] = new $Class($file_path);
         }
         return self::$_CACHE['instances'][$file_path];
     }
@@ -41,12 +42,13 @@ class File {
      * @return File()
      */
     public static function instance_of_first_existing_file($file_pathes) {
+        $Class = get_called_class();
         foreach ((array) $file_pathes as $file_path) {
             if (is_file($file_path)) {
-                return File::instance($file_path);
+                return $Class::instance($file_path);
             }
         }
-        return new File();
+        return new $Class();
     }
 
     public function name() {
@@ -162,7 +164,6 @@ class File {
     public static function n($p) {
         return self::normalize_folder($p);
     }
-    
 
     public static function _name($filepath) {
         if (!isset(self::$_CACHE['filenames'][$filepath])) {
@@ -193,7 +194,6 @@ class File {
         }
         return self::$_CACHE['fileext'][$filepath];
     }
-    
 
     public static function _create_try_list($filename, $extensions = array(), $prepathes = false) {
         $list = array();
