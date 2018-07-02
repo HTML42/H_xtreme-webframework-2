@@ -12,7 +12,7 @@ define('PROJECT_ROOT', str_replace('xtreme/', '', ROOT));
 define('SCRIPT_INCLUDES', PROJECT_ROOT . 'script_includes/');
 if (strstr($_SERVER['SERVER_NAME'], 'localhost') || strstr($_SERVER['SERVER_NAME'], '192.')) {
     define('ENV', 'dev');
-} else if (strstr($_SERVER['SERVER_NAME'], 'staging')) {
+} else if (strstr($_SERVER['SERVER_NAME'], 'staging') || strstr($_SERVER['SERVER_NAME'], '.dev.html42')) {
     define('ENV', 'test');
 } else {
     define('ENV', 'live');
