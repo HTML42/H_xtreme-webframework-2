@@ -1,7 +1,7 @@
 <?php
 
 $request = @reset(explode('.', Request::$requested_clean_path));
-$extensions = array('php', str_replace($request, '', Request::$requested_clean_path));
+$extensions = array(str_replace($request, '', Request::$requested_clean_path), 'php');
 //
 $File_page_trylist = File::_create_try_list($request, $extensions, 'pages/');
 $File_page = File::instance_of_first_existing_file($File_page_trylist);

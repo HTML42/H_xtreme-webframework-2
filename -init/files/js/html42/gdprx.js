@@ -45,7 +45,7 @@ GDPRX.prototype.html = function () {
     $$.foreach(this.scripts, function (script_data, key) {
         var row = '<div class="gx_script_caption">' + key + '</div>';
         row += '<div class="gx_script_text">' + script_data.description + '</div>';
-        if (GX_privacy(key, false)) {
+        if (GX_privacy(key, script_data.default)) {
             row += '<div class="gx_script_status">' + _this.texts.status_text + ': <b>' + _this.texts.status_on + '</b>';
             row += '&nbsp; <div class="gx_button" data-decline>' + _this.texts.button_decline + '</div></div>';
         } else {
@@ -117,6 +117,13 @@ var GX_lib = {
             en: "Google Analytics tracks your clicks and views on a server, owned by google.",
             de: "Google Analytics speichert deine Website-Aktionen auf einem Server von Google."
         }
+    },
+    maps: {
+        "default": true,
+        "description": {
+            en: "Google Maps.",
+            de: "Google Maps."
+        }
     }
 };
 var GX_predefined = {
@@ -132,7 +139,7 @@ var GX_predefined = {
                 "name": "Analytics",
                 "src": "https://www.googletagmanager.com/gtag/js?id=" + tracking_id,
                 "description": description,
-                "default": false,
+                "default": GX_lib.maps.default,
                 "callback": function () {
                     window.dataLayer = window.dataLayer || [];
                     function gtag() {
@@ -142,11 +149,28 @@ var GX_predefined = {
                     gtag('js', new Date());
                     gtag('config', tracking_id);
                 }
+            };
+        }
+        return null;
+    },
+    maps: function (api_key, callback, lang) {
+        if (typeof api_key != 'undefined') {
+            if (!isset(lang)) {
+                lang = 'en';
             }
+            window.__init_map__ = function() {
+                execute(callback);
+            };
+            return {
+                "name": "Google Maps",
+                "src": "https://maps.googleapis.com/maps/api/js?key=" + api_key + "&callback=__init_map__",
+                "description": GX_lib.maps.description[lang],
+                "default": GX_lib.maps.default
+            };
         }
         return null;
     }
-}
+};
 var GX_texts = {
     de: {
         button_accept: 'Akzeptieren',
