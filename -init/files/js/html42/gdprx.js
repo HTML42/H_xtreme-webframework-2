@@ -153,7 +153,7 @@ var GX_predefined = {
         }
         return null;
     },
-    maps: function (api_key, callback, lang) {
+    maps: function (api_key, libraries, callback, lang) {
         if (typeof api_key != 'undefined') {
             if (!isset(lang)) {
                 lang = 'en';
@@ -161,15 +161,19 @@ var GX_predefined = {
             window.__init_map__ = function() {
                 execute(callback);
             };
+            if(!is_array(libraries)) {
+                libraries = "";
+            } else {
+                libraries = "&libraries=" + libraries.join(',');
+            }
             return {
                 "name": "Google Maps",
-                "src": "https://maps.googleapis.com/maps/api/js?key=" + api_key + "&callback=__init_map__",
+                "src": "https://maps.googleapis.com/maps/api/js?key=" + api_key + libraries + "&callback=__init_map__",
                 "description": GX_lib.maps.description[lang],
                 "default": GX_lib.maps.default
             };
         }
         return null;
-    }
 };
 var GX_texts = {
     de: {
