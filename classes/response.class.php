@@ -36,8 +36,10 @@ class Response {
                 $content = str_replace('</body>', $link_matches, $content);
             }
         }
-        $content = preg_replace('/\s\s+/', ' ', $content);
-        $content = preg_replace('/\>\s+\</', '><', $content);
+        if(!isset($GLOBALS['nohtmlmin'])) {
+            $content = preg_replace('/\s\s+/', ' ', $content);
+            $content = preg_replace('/\>\s+\</', '><', $content);
+        }
         //
         self::$content = $content;
 

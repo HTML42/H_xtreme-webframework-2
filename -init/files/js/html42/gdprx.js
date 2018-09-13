@@ -158,10 +158,10 @@ var GX_predefined = {
             if (!isset(lang)) {
                 lang = 'en';
             }
-            window.__init_map__ = function() {
+            window.__init_map__ = function () {
                 execute(callback);
             };
-            if(!is_array(libraries)) {
+            if (!is_array(libraries)) {
                 libraries = "";
             } else {
                 libraries = "&libraries=" + libraries.join(',');
@@ -174,6 +174,7 @@ var GX_predefined = {
             };
         }
         return null;
+    }
 };
 var GX_texts = {
     de: {
