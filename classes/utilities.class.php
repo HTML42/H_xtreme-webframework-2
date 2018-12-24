@@ -347,5 +347,17 @@ class Utilities {
             return $string;
         }
     }
+    
+    public static function remote_ip() {
+        if(isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
+            return $_SERVER["HTTP_CF_CONNECTING_IP"];
+        } else if(isset($_SERVER["HTTP_X_FORWARDED_FOR"])) {
+            return $_SERVER["HTTP_X_FORWARDED_FOR"];
+        } else if(isset($_SERVER['REMOTE_ADDR'])) {
+            return $_SERVER['REMOTE_ADDR'];
+        } else {
+            return null;
+        }
+    }
 
 }
