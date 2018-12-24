@@ -36,6 +36,7 @@ include CLASSES . 'response.class.php';
 include CLASSES . 'html.class.php';
 include CLASSES . 'curl.class.php';
 include CLASSES . 'email.class.php';
+include CLASSES . 'validate.class.php';
 //
 include LIB . 'ensure_functions.php';
 

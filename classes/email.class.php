@@ -69,8 +69,8 @@ class Email {
         $header = self::header();
         $amount_of_recipients = count($this->recipient);
         if ($this->debug) {
-            dump($header);
-            dump($this->recipient);
+            debug($header);
+            debug($this->recipient);
         }
         try {
             if ($amount_of_recipients > 1) {
@@ -94,7 +94,7 @@ class Email {
             }
         } catch (Exception $e) {
             if ($this->debug) {
-                dump($e);
+                debug($e);
             }
         }
 
@@ -121,8 +121,6 @@ class Email {
             'X-Mailer' => 'PHP/' . phpversion(),
             'Content-Transfer-Encoding' => '8bit'
         );
-
-        $this->_set_Xtreme_systemparameters();
     }
 
     /** Generate the mail-header */
