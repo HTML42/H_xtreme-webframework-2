@@ -17,6 +17,7 @@ var config = {
         'xtreme/-init/files/js/html42/xtreme.js',
         'xtreme/-init/files/js/html42/technologies/list_length.js',
         'xtreme/-init/files/js/html42/technologies/ajax_links.js',
+        'xtreme/-init/files/js/html42/technologies/cookies.js',
         'js/elements/*',
         'js/pages/*',
         'js/project.js',

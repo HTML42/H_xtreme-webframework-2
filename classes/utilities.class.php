@@ -163,18 +163,17 @@ class Utilities {
     }
 
     public static function css_active($param) {
-        global $SUPPORTED_EXTENSIONS;
         $is_active = false;
         if (!is_array($param)) {
             $param = array($param);
         }
-
+        $request = str_replace(array('.html', '.php'), '', implode('/', Request::$requested_clean_path_array));
         foreach ($param as $check_string) {
             if (is_string($check_string)) {
-                $check_string_naked = preg_replace('/\.(' . implode('|', $SUPPORTED_EXTENSIONS) . ')/isU', '', $check_string);
-                if ($check_string == App::$request) {
+                $check_string_naked = str_replace(array('.html', '.php'), '', $check_string);
+                if ($check_string == $request) {
                     $is_active = true;
-                } elseif ($check_string_naked == App::$request) {
+                } elseif ($check_string_naked == $request) {
                     $is_active = true;
                 }
                 if ($is_active) {
