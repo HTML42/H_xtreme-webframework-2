@@ -52,7 +52,10 @@ class Html {
         $attr = $attr + array(
             'href' => trim($href)
         );
-        if (Request::$requested_clean_path == $attr['href'] || str_replace('admin/', '', Request::$requested_clean_path) == $attr['href']) {
+        $clean_href = @reset(explode('?', $attr['href']));
+        if (Request::$requested_clean_path == $clean_href ||
+                str_replace('admin/', '', Request::$requested_clean_path) == $clean_href ||
+                (defined('LANG') && str_replace(LANG . '/', '', Request::$requested_clean_path) == $clean_href)) {
             $attr['class'] = (isset($attr['class']) ? $attr['class'] . ' active' : 'active');
         }
         $html = '<a' . self::_attributes($attr) . '>';
