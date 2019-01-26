@@ -158,6 +158,9 @@ class Form {
                     if(isset($input_data['max']) && is_numeric($input_data['max'])) {
                         $input_attributes .= ' max="' . Validate::strict_int($input_data['max']) . '" ';
                     }
+                    if(empty($input_data['value']) && $input_data['type'] == 'range') {
+                        $input_attributes .= ' value="0" ';
+                    }
                     $row_html .= '<input' . $input_attributes . ' type="' . $input_data['type'] . '">';
                 }
                 $row_html .= '</div>';
