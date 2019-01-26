@@ -61,7 +61,13 @@ class Form {
         //
         foreach ($this->rows as $row_index => $row) {
             $row = self::_merge($this->default_row, $row);
-            $row_html = '<div' . self::_html_attr('class', $row['css_class']) . '>';
+            $row_html = '<div' . self::_html_attr('class', $row['css_class']);
+            if (isset($row['attr']) && is_array($row['attr']) && !empty($row['attr'])) {
+                foreach ($row['attr'] as $attr_key => $attr_value) {
+                    $row_html .= self::_html_attr($attr_key, $attr_value);
+                }
+            }
+            $row_html .= '>';
             //
             if (isset($row['input']) && isset($row['input']['id'])) {
                 $input_id = strval($row['input']['id']);
