@@ -152,6 +152,12 @@ class Form {
                         $row_html .= $input_data['items'];
                     }
                 } else {
+                    if(isset($input_data['min']) && is_numeric($input_data['min'])) {
+                        $input_attributes .= ' min="' . Validate::strict_int($input_data['min']) . '" ';
+                    }
+                    if(isset($input_data['max']) && is_numeric($input_data['max'])) {
+                        $input_attributes .= ' max="' . Validate::strict_int($input_data['max']) . '" ';
+                    }
                     $row_html .= '<input' . $input_attributes . ' type="' . $input_data['type'] . '">';
                 }
                 $row_html .= '</div>';
