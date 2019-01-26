@@ -101,7 +101,9 @@ class Form {
                     $label_tag = 'div';
                 }
                 $row_html .= '<' . $label_tag . self::_html_attr('class', $label_data['css_class']) . ($label_tag == 'label' ? ' for="' . $input_id . '" ' : '') . '">';
-                $row_html .= $label_data['main'];
+                if (isset($label_data['main']) && is_string($label_data['main']) && !empty($label_data['main'])) {
+                    $row_html .= '<span class="form_label_main">' . $label_data['main'] . '</span>';
+                }
                 if (isset($label_data['sub']) && is_string($label_data['sub']) && !empty($label_data['sub'])) {
                     $row_html .= '<span class="form_label_sub">' . $label_data['sub'] . '</span>';
                 }
