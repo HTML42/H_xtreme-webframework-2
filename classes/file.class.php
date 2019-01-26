@@ -39,7 +39,7 @@ class File {
     /**
      * 
      * @param array/string $file_path
-     * @return File()
+     * @return new File()
      */
     public static function instance_of_first_existing_file($file_pathes) {
         $Class = get_called_class();
