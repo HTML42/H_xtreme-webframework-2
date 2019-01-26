@@ -6,6 +6,7 @@ class Form {
     public $method = 'POST';
     public $enctype = 'application/x-www-form-urlencoded';
     public $css_class = 'standard_form';
+    public $id = null;
     public $default_row = array(
         'css_class' => 'form_row',
         'label' => array(
@@ -44,6 +45,9 @@ class Form {
                     $this->{'add_' . $key}($config[$key]);
                 }
             }
+            if (isset($config['id'])) {
+                $this->id = trim($config['id']);
+            }
         }
     }
 
@@ -56,6 +60,9 @@ class Form {
         }
         if (is_string($this->css_class)) {
             $html .= self::_html_attr('class', $this->css_class);
+        }
+        if ($this->id) {
+            $html .= ' id="' . $this->id . '" ';
         }
         $html .= '>' . "\r\n";
         //
@@ -152,13 +159,13 @@ class Form {
                         $row_html .= $input_data['items'];
                     }
                 } else {
-                    if(isset($input_data['min']) && is_numeric($input_data['min'])) {
+                    if (isset($input_data['min']) && is_numeric($input_data['min'])) {
                         $input_attributes .= ' min="' . Validate::strict_int($input_data['min']) . '" ';
                     }
-                    if(isset($input_data['max']) && is_numeric($input_data['max'])) {
+                    if (isset($input_data['max']) && is_numeric($input_data['max'])) {
                         $input_attributes .= ' max="' . Validate::strict_int($input_data['max']) . '" ';
                     }
-                    if(empty($input_data['value']) && $input_data['type'] == 'range') {
+                    if (empty($input_data['value']) && $input_data['type'] == 'range') {
                         $input_attributes .= ' value="0" ';
                     }
                     $row_html .= '<input' . $input_attributes . ' type="' . $input_data['type'] . '">';
