@@ -18,7 +18,9 @@ class Email {
 
     /** Add Content, and optional attachments */
     public function attachment($attachment) {
-        if (is_array($attachment)) {
+        if (is_array($attachment) && isset($attachment['name']) && isset($attachment['file']) && is_file($attachment['file'])) {
+            array_push($this->attachments, $attachment);
+        } else if (is_array($attachment)) {
             foreach ($attachment as $attachment_part) {
                 self::attachment($attachment_part);
             }
@@ -73,6 +75,32 @@ class Email {
             debug($this->recipient);
         }
         try {
+            if (is_array($this->attachments) && !empty($this->attachments)) {
+                foreach ($this->attachments as $index => $attachment) {
+                    if (is_array($attachment)) {
+                        $attachment_name = $attachment['name'];
+                        $attachment_filepath = $attachment['file'];
+                    } else if (is_string($attachment)) {
+                        $attachment_filepath = $attachment;
+                        $attachment_name = File::_name($attachment_filepath);
+                    }
+                    $content = file_get_contents($attachment_filepath);
+                    $content = chunk_split(base64_encode($content));
+                    $separator = md5(time());
+                    $eol = "\r\n";
+                    //
+                    if ($index > 0) {
+                        $this->content .= $eol;
+                    }
+                    $this->content .= "--" . $separator . $eol;
+                    $this->content .= "Content-Type: application/octet-stream; name=\"" . $attachment_name . "\"" . $eol;
+                    $this->content .= "Content-Transfer-Encoding: base64" . $eol;
+                    $this->content .= "Content-Disposition: attachment" . $eol;
+                    $this->content .= $content . $eol;
+                    $this->content .= "--" . $separator . "--";
+                }
+            }
+            //
             if ($amount_of_recipients > 1) {
                 if ($amount_of_recipients > 100) {
                     $delay = round(10000 / $amount_of_recipients);
