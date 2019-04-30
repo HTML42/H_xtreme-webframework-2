@@ -67,6 +67,11 @@ class Form {
         $html .= '>' . "\r\n";
         //
         foreach ($this->rows as $row_index => $row) {
+            if(isset($row['raw'])) {
+                $html .= $row['raw'];
+                continue;
+            }
+            //
             $row = self::_merge($this->default_row, $row);
             $row_html = '<div' . self::_html_attr('class', $row['css_class']);
             if (isset($row['attr']) && is_array($row['attr']) && !empty($row['attr'])) {
@@ -100,7 +105,7 @@ class Form {
                 if (isset($input_data['type']) && in_array($input_data['type'], array('checkbox', 'radio')) && $label_tag == 'label') {
                     $label_tag = 'div';
                 }
-                $row_html .= '<' . $label_tag . self::_html_attr('class', $label_data['css_class']) . ($label_tag == 'label' ? ' for="' . $input_id . '" ' : '') . '">';
+                $row_html .= '<' . $label_tag . self::_html_attr('class', $label_data['css_class']) . ($label_tag == 'label' ? ' for="' . $input_id . '" ' : '') . '>';
                 if (isset($label_data['main']) && is_string($label_data['main']) && !empty($label_data['main'])) {
                     $row_html .= '<span class="form_label_main">' . $label_data['main'] . '</span>';
                 }
