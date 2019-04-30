@@ -109,17 +109,13 @@ class Email {
                     if ($index > 0) {
                         usleep($delay);
                     }
-                    __send($PHPMailer, $to);
+                    $PHPMailer->addAddress($to);
+                    $PHPMailer->send();
                 }
             } else if ($amount_of_recipients == 1) {
-                __send($PHPMailer, reset($this->recipient));
-            }
-
-            function __send($PHPMailer, $recipient) {
-                $PHPMailer->addAddress($recipient);
+                $PHPMailer->addAddress(reset($this->recipient));
                 $PHPMailer->send();
             }
-
         } catch (Exception $e) {
             if ($this->debug) {
                 debug($e);
@@ -167,7 +163,6 @@ class Email {
                 }
             }
         }
-        return $header_code;
     }
 
 }
