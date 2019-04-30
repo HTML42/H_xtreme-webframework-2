@@ -7,6 +7,7 @@ $path = str_replace('library/' . basename(__FILE__), '', $thisFile);
 define('ROOT', $path);
 define('LIB', ROOT . 'library/');
 define('CLASSES', ROOT . 'classes/');
+define('THIRD_PARTY', ROOT . 'third_party/');
 define('CACHE', ROOT . '../cache/');
 define('PROJECT_ROOT', str_replace('xtreme/', '', ROOT));
 define('SCRIPT_INCLUDES', PROJECT_ROOT . 'script_includes/');
@@ -40,6 +41,8 @@ include CLASSES . 'validate.class.php';
 include CLASSES . 'form.class.php';
 //
 include LIB . 'ensure_functions.php';
+//
+include THIRD_PARTY . 'phpmailer.class.php';
 
 //Initiate RequestClass
 Request::init();

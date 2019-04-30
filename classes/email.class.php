@@ -68,47 +68,32 @@ class Email {
 
     /** Send Email */
     public function send() {
-        $header = self::header();
         $amount_of_recipients = count($this->recipient);
         if ($this->debug) {
-            debug($header);
+            debug('Sending E-Mail to:');
             debug($this->recipient);
         }
         try {
-            $separator = md5(time());
-            $eol = "\n";
-            $message = $this->content;
-            //
-            $this->content = "--" . $separator . $eol;
-            $this->content .= "Content-Type: text/plain; charset=\"iso-8859-1\"" . $eol;
-            $this->content .= "Content-Transfer-Encoding: 8bit" . $eol;
-            $this->content .= $message . $eol;
+            $PHPMailer = new PHPMailer();
+            self::header($PHPMailer);
             //
             if (is_array($this->attachments) && !empty($this->attachments)) {
                 foreach ($this->attachments as $index => $attachment) {
                     if (is_array($attachment)) {
-                        $attachment_name = $attachment['name'];
-                        $attachment_filepath = $attachment['file'];
+                        $PHPMailer->addAttachment($attachment['file'], $attachment['name']);
                     } else if (is_string($attachment)) {
-                        $attachment_filepath = $attachment;
-                        $attachment_name = File::_name($attachment_filepath);
+                        $PHPMailer->addAttachment($attachment, File::_name($attachment_filepath));
                     }
-                    $content = file_get_contents($attachment_filepath);
-                    $content = chunk_split(base64_encode($content));
-                    //
-                    if ($index > 0) {
-                        $this->content .= $eol;
-                    }
-                    $this->content .= "--" . $separator . $eol;
-                    $this->content .= "Content-Type: application/octet-stream; name=\"" . $attachment_name . "\"" . $eol;
-                    $this->content .= "Content-Transfer-Encoding: base64" . $eol;
-                    $this->content .= "Content-Disposition: attachment" . $eol;
-                    $this->content .= $content . $eol;
-                    $this->content .= "--" . $separator . "--";
-                    //
-                    $header = preg_replace('|Content-Type:.+\n|isU', "Content-Type: multipart/mixed; boundary=\"" . $separator . "\"" . $eol, $header);
                 }
             }
+            //
+            if (strstr($this->email_type, 'html')) {
+                $PHPMailer->isHTML(true);
+            }
+            $PHPMailer->Subject = $this->subject;
+            $PHPMailer->Body = $this->content;
+            $PHPMailer->AltBody = strip_tags($this->content);
+            //
             //
             if ($amount_of_recipients > 1) {
                 if ($amount_of_recipients > 100) {
@@ -124,11 +109,17 @@ class Email {
                     if ($index > 0) {
                         usleep($delay);
                     }
-                    mail($to, '=?UTF-8?B?' . base64_encode($this->subject) . '?=', $this->content, $header);
+                    __send($PHPMailer, $to);
                 }
             } else if ($amount_of_recipients == 1) {
-                mail(reset($this->recipient), '=?UTF-8?B?' . base64_encode($this->subject) . '?=', $this->content, $header);
+                __send($PHPMailer, reset($this->recipient));
             }
+
+            function __send($PHPMailer, $recipient) {
+                $PHPMailer->addAddress($recipient);
+                $PHPMailer->send();
+            }
+
         } catch (Exception $e) {
             if ($this->debug) {
                 debug($e);
@@ -152,37 +143,27 @@ class Email {
         $this->reply = false;
         $this->charset = 'UTF-8';
         $this->from = false;
-
-        $this->header = array(
-            'MIME-Version' => '1.0',
-            'X-Mailer' => 'PHP/' . phpversion(),
-            'Content-Transfer-Encoding' => '8bit'
-        );
     }
 
     /** Generate the mail-header */
-    private function header() {
-        $header_code = 'Content-type:' . $this->email_type . ';charset=' . $this->charset . ';';
-        foreach ($this->header as $header_key => $header_value) {
-            $header_code .= "\n" . $header_key . ':' . $header_value . ';';
-        }
+    private function header($PHPMailer) {
         if ($this->reply && Validate::is_email($this->reply)) {
-            $header_code .= "\n" . 'Reply-To:' . $this->reply . ';';
+            $PHPMailer->addReplyTo($this->reply);
         }
         if ($this->from && Validate::is_email($this->from)) {
-            $header_code .= "\n" . 'From:' . $this->from . ';';
+            $PHPMailer->setFrom($this->from);
         }
         if ($this->cc) {
             foreach ($this->cc as $cc) {
                 if (Validate::is_email($cc)) {
-                    $header_code .= "\n" . 'Cc:' . $cc . ';';
+                    $PHPMailer->addCC($cc);
                 }
             }
         }
         if ($this->bcc) {
             foreach ($this->bcc as $bcc) {
-                if (Validate::is_email($cc)) {
-                    $header_code .= "\n" . 'Bcc:' . $bcc . ';';
+                if (Validate::is_email($bcc)) {
+                    $PHPMailer->addBCC($bcc);
                 }
             }
         }
