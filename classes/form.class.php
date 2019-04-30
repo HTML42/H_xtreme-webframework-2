@@ -84,16 +84,16 @@ class Form {
             //
             if (isset($row['input'])) {
                 if (is_string($row['input'])) {
-                    $row['input'] = $this->$default_row['input'] + array('name' => $row['input']);
+                    $row['input'] = $this->default_row['input'] + array('name' => $row['input']);
                 }
             } else {
-                $row['input'] = $this->$default_row['input'];
+                $row['input'] = $this->default_row['input'];
             }
             $input_data = $row['input'];
             //
             if (isset($row['label'])) {
                 if (is_string($row['label'])) {
-                    $row['label'] = $this->$default_row['label'] + array('main' => $row['label']);
+                    $row['label'] = $this->default_row['label'] + array('main' => $row['label']);
                 }
                 $label_data = $row['label'];
                 $label_tag = $label_data['type'];
@@ -125,6 +125,7 @@ class Form {
                 $input_attributes .= self::_html_attr('name', $input_data['name']);
                 $input_attributes .= self::_html_attr('placeholder', $input_data['placeholder']);
                 $input_attributes .= self::_html_attr('class', $input_data['css_class']);
+                $input_attributes .= self::_html_attr('value', $input_data['value']);
 
                 if ($input_data['type'] == 'select') {
                     $row_html .= '<select' . $input_attributes . '>';
