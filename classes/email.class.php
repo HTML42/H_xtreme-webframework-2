@@ -75,6 +75,15 @@ class Email {
             debug($this->recipient);
         }
         try {
+            $separator = md5(time());
+            $eol = "\n";
+            $message = $this->content;
+            //
+            $this->content = "--" . $separator . $eol;
+            $this->content .= "Content-Type: text/plain; charset=\"iso-8859-1\"" . $eol;
+            $this->content .= "Content-Transfer-Encoding: 8bit" . $eol;
+            $this->content .= $message . $eol;
+            //
             if (is_array($this->attachments) && !empty($this->attachments)) {
                 foreach ($this->attachments as $index => $attachment) {
                     if (is_array($attachment)) {
@@ -86,8 +95,6 @@ class Email {
                     }
                     $content = file_get_contents($attachment_filepath);
                     $content = chunk_split(base64_encode($content));
-                    $separator = md5(time());
-                    $eol = "\r\n";
                     //
                     if ($index > 0) {
                         $this->content .= $eol;
@@ -98,6 +105,8 @@ class Email {
                     $this->content .= "Content-Disposition: attachment" . $eol;
                     $this->content .= $content . $eol;
                     $this->content .= "--" . $separator . "--";
+                    //
+                    $header = preg_replace('|Content-Type:.+\n|isU', "Content-Type: multipart/mixed; boundary=\"" . $separator . "\"" . $eol, $header);
                 }
             }
             //
