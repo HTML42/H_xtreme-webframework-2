@@ -1,5 +1,11 @@
 <?php
 
+//If Session-Holder
+if (strstr($_SERVER['REQUEST_URI'], 'hold_the_session')) {
+    @session_start();
+    exit();
+}
+
 //Variables / Constants
 $thisFile = __FILE__;
 $thisFile = str_replace('\\', '/', $thisFile);
@@ -48,9 +54,9 @@ include THIRD_PARTY . 'phpmailer.class.php';
 Request::init();
 define('BASEURL', "http" . (is_https() ? 's' : '') . "://" . $_SERVER['SERVER_NAME'] . '/' . Request::$url_path_to_script);
 
-if(is_dir(SCRIPT_INCLUDES)) {
-    foreach(Utilities::ls(SCRIPT_INCLUDES, true) as $script_filename) {
-        if(File::_ext($script_filename) == 'php') {
+if (is_dir(SCRIPT_INCLUDES)) {
+    foreach (Utilities::ls(SCRIPT_INCLUDES, true) as $script_filename) {
+        if (File::_ext($script_filename) == 'php') {
             include SCRIPT_INCLUDES . $script_filename;
         }
     }
